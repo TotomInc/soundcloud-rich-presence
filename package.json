@@ -11,10 +11,13 @@
     "dev:server": "nodemon"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
+    "@types/dotenv": "^6.1.0",
     "@types/jquery": "^3.3.29",
     "@types/socket.io-client": "^1.4.32",
     "eslint": "5.3.0",
