@@ -1,6 +1,11 @@
 (function () {
+  const wsServerURL = 'http://127.0.0.1:7399';
+
   /** @type {jQuery} */
   const $ = window.$;
+
+  /** @type {SocketIO.Socket} */
+  const socket = window.io(wsServerURL);
 
   /** @type {string} */
   let actualTrackURL;
@@ -32,7 +37,7 @@
     const trackEl = $('a.playbackSoundBadge__titleLink');
 
     if (trackEl.length) {
-      return `https://soundcloud.com/${trackEl.attr('href')}`;
+      return `https://soundcloud.com${trackEl.attr('href')}`;
     }
 
     _log('unable to retrieve current track URL because the player doesn\'t exist or is not found in the DOM');
@@ -64,7 +69,7 @@
     const currentTrackURL = _getCurrentTrackURL();
     const trackProgression = _getTrackProgression();
 
-    if (currentTrackURL !== actualTrackURL) {
+    if (currentTrackURL !== actualTrackURL && currentTrackURL && socket.connected) {
       const payload = {
         trackURL: currentTrackURL,
         progression: trackProgression,
@@ -72,9 +77,18 @@
 
       actualTrackURL = currentTrackURL;
 
+      socket.emit('rp-update', payload);
       _log('new track detected, sending payload...', payload);
     }
   }
+
+  socket.on('connect', () => {
+    _log('connected to WebSocket server');
+  });
+
+  socket.on('disconnect', () => {
+    _log('disconnected from WebSocket server, trying to reconnect...');
+  });
 
   setInterval(() => _loop(), 5000);
 }());
