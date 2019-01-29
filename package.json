@@ -7,6 +7,9 @@
   "author": "TotomInc <cazade.thomas@gmail.com>",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "dev:server": "nodemon"
+  },
   "dependencies": {
     "express": "^4.16.4",
     "socket.io": "^2.2.0"
@@ -16,6 +19,7 @@
     "@types/socket.io-client": "^1.4.32",
     "eslint": "5.3.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "2.14.0"
+    "eslint-plugin-import": "2.14.0",
+    "nodemon": "^1.18.9"
   }
 }
