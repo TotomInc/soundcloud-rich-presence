@@ -1,0 +1,21 @@
+{
+  "name": "soundcloud-to-discord-rp",
+  "version": "0.0.1",
+  "description": "Set your Discord rich-presence to what you are listening on SoundCloud.",
+  "main": "dist/index.js",
+  "repository": "http://github.com/TotomInc/soundcloud-rich-presence",
+  "author": "TotomInc <cazade.thomas@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.3.29",
+    "@types/socket.io-client": "^1.4.32",
+    "eslint": "5.3.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "2.14.0"
+  }
+}

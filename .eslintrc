@@ -1,0 +1,17 @@
+{
+  "extends": "airbnb-base",
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "no-underscore-dangle": "off",
+    "no-console": "off",
+    "func-names": "off",
+    "prefer-destructuring": "off",
+    "arrow-parens": ["error", "always"],
+    "max-len": ["error", {
+      "ignoreComments": true
+    }]
+  }
+}
