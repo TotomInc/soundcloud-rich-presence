@@ -10,6 +10,7 @@
     "func-names": "off",
     "prefer-destructuring": "off",
     "arrow-parens": ["error", "always"],
+    "camelcase": "off",
     "max-len": ["error", {
       "code": 120,
       "ignoreComments": true
