@@ -21,7 +21,7 @@ class RPCWrapper {
    */
   _initRPC() {
     this.status = false;
-    this.rpc.on('ready', () => console.log('RPC client ready'));
+    this.rpc.on('ready', () => console.log(`RPC client ready, logged in as ${this.rpc.user.username}`));
 
     this._connect();
   }
@@ -45,8 +45,32 @@ class RPCWrapper {
       });
   }
 
-  getActivity() {
-    return this.currentActivity;
+  /**
+   * Set a new rich-presence state.
+   *
+   * @param {any} data track data from SoundCloud and artworks IDs (keys)
+   */
+  setActivity(data) {
+    const {
+      title, author, trackArtworkAssetID, authorArtworkAssetID,
+    } = data;
+
+    /** @type {RPC.Presence} */
+    const payload = {
+      details: title,
+      state: author,
+      largeImageKey: trackArtworkAssetID,
+      largeImageText: title,
+      smallImageKey: authorArtworkAssetID,
+      smallImageText: author,
+      instance: false,
+    };
+
+    return this.rpc.setActivity(payload);
+  }
+
+  clearActivity() {
+    return this.rpc.clearActivity();
   }
 }
 
