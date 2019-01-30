@@ -16,6 +16,7 @@
     "discord-rpc": "^3.0.1",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
+    "node-windows": "^0.1.14",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
