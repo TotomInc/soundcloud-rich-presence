@@ -2,13 +2,14 @@
   "name": "soundcloud-rich-presence",
   "version": "0.0.1",
   "description": "Set your Discord rich-presence to what you are listening on SoundCloud.",
-  "main": "dist/index.js",
+  "main": "src/server/index.js",
   "repository": "http://github.com/TotomInc/soundcloud-rich-presence",
   "author": "TotomInc <cazade.thomas@gmail.com>",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "dev:server": "nodemon"
+    "start": "node src/server",
+    "dev": "nodemon"
   },
   "dependencies": {
     "axios": "^0.18.0",
