@@ -21,4 +21,13 @@ function resolveTrackURL(url) {
     .catch((err) => err);
 }
 
-module.exports = { resolveTrackURL };
+/**
+ * Replace the URL of the small thumbnail to a large 500x500 image.
+ *
+ * @param {string} url the artwork URL which is a small thumbnail
+ */
+function getArtworkURL(url) {
+  return url.replace('large', 't500x500');
+}
+
+module.exports = { resolveTrackURL, getArtworkURL };
