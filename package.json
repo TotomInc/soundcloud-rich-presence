@@ -16,7 +16,6 @@
     "discord-rpc": "^3.0.1",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
-    "node-windows": "^0.1.14",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
@@ -27,5 +26,8 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "2.14.0",
     "nodemon": "^1.18.9"
+  },
+  "optionalDependencies": {
+    "node-windows": "^0.1.14"
   }
 }
