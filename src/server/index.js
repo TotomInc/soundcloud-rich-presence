@@ -6,6 +6,8 @@ const httpServer = require('http').Server(app);
 const io = require('socket.io')(httpServer);
 
 const soundcloudAPI = require('./soundcloud-api');
+const richPresence = require('./rich-presence');
+const rpc = require('./rpc-wrapper');
 
 httpServer.listen(7399);
 
@@ -19,12 +21,36 @@ app.get('/soundcloud.js', (req, res) => {
 io.on('connection', (socket) => {
   console.log('user socket connected');
 
-  socket.on('rp-update', (track) => {
+  socket.on('rp-update', async (track) => {
     const { trackURL, progression } = track;
 
-    soundcloudAPI.resolveTrackURL(trackURL)
-      .then((res) => {
-        const { title, artwork_url, user: { username, avatar_url } } = res.data;
-      });
+    const assetList = await richPresence.getAssetList()
+      .then((response) => response.data);
+
+    if (assetList.length >= richPresence.MAX_ASSETS) {
+      await richPresence.deleteOldAssets(assetList);
+    }
+
+    const rawTrackData = await soundcloudAPI.resolveTrackURL(trackURL)
+      .then((response) => response.data);
+
+    const trackData = {
+      title: rawTrackData.title,
+      author: rawTrackData.user.username,
+      trackArtworkURL: soundcloudAPI.getArtworkURL(rawTrackData.artwork_url),
+      authorArtworkURL: soundcloudAPI.getArtworkURL(rawTrackData.user.avatar_url),
+      permalinkURL: rawTrackData.permalink_url,
+    };
+
+    const trackArtworkAssetID = await richPresence.uploadAsset(trackData.trackArtworkURL)
+      .then((response) => response.data.name);
+
+    const authorArtworkAssetID = await richPresence.uploadAsset(trackData.authorArtworkURL)
+      .then((response) => response.data.name);
+
+    const richPresencePayload = { ...trackData, trackArtworkAssetID, authorArtworkAssetID };
+
+    await rpc.setActivity(richPresencePayload)
+      .then(() => console.log('new rich-presence state successfully setup', richPresencePayload));
   });
 });
