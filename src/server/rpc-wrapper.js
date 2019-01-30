@@ -4,6 +4,8 @@ const { Client } = require('discord-rpc');
 
 const BOT_CLIENT_ID = process.env.BOT_CLIENT_ID;
 
+const connectionWaitInterval = 10;
+
 class RPCWrapper {
   /**
    * @param {RPC.Client} rpc
@@ -11,7 +13,6 @@ class RPCWrapper {
   constructor(rpc) {
     this.rpc = rpc;
     this.status = false;
-    this.currentActivity = false;
 
     this._initRPC();
   }
@@ -28,20 +29,23 @@ class RPCWrapper {
 
   /**
    * Try to connect to Discord using a `BOT_CLIENT_ID`. Automatically update
-   * the `status` when connected or not.
+   * the `status` when connected or not. Return the promise which is resolved
+   * when the rpc is connected.
    */
   _connect() {
-    this.rpc.login({ clientId: BOT_CLIENT_ID })
+    return this.rpc.login({ clientId: BOT_CLIENT_ID })
       .then(() => {
         console.log('RPC connected to Discord');
 
         this.status = true;
       })
       .catch((err) => {
-        console.log('Failed to connect to Discord');
+        console.log(`Failed to connect to Discord, trying to reconnect again in ${connectionWaitInterval} seconds`);
         console.error(err);
 
         this.status = false;
+
+        setTimeout(() => this._connect(), connectionWaitInterval * 1000);
       });
   }
 
@@ -69,6 +73,9 @@ class RPCWrapper {
     return this.rpc.setActivity(payload);
   }
 
+  /**
+   * Remove rich-presence status.
+   */
   clearActivity() {
     return this.rpc.clearActivity();
   }
