@@ -21,6 +21,13 @@ app.get('/soundcloud.js', (req, res) => {
 io.on('connection', (socket) => {
   console.log('user socket connected');
 
+  socket.on('disconnect', async () => {
+    console.log('client socket disconnected, clearing the rich-presence state...');
+
+    rpc.clearActivity()
+      .then(() => console.log('successfully cleared the rich-presence state'));
+  });
+
   socket.on('rp-update', async (track) => {
     const { trackURL, progression } = track;
 
