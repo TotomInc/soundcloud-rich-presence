@@ -90,5 +90,11 @@
     _log('disconnected from WebSocket server, trying to reconnect...');
   });
 
+  socket.on('reconnect', () => {
+    _log('successfully reconnected to WebSocket server');
+
+    actualTrackURL = undefined;
+  });
+
   setInterval(() => _loop(), 5000);
 }());
