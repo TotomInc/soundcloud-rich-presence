@@ -19,20 +19,32 @@ class RPCWrapper {
 
   /**
    * Initialize the RPC events then try to connect, called by the constructor.
+   *
+   * @param connect {boolean} try to connect after init, set to true by default
    */
-  _initRPC() {
+  _initRPC(connect = true) {
     this.status = false;
     this.rpc.on('ready', () => console.log(`RPC client ready, logged in as ${this.rpc.user.username}`));
 
-    this._connect();
+    if (connect) {
+      this._connect();
+    }
   }
 
   /**
    * Try to connect to Discord using a `BOT_CLIENT_ID`. Automatically update
    * the `status` when connected or not. Return the promise which is resolved
    * when the rpc is connected.
+   *
+   * @param retry {boolean} retry flag, set to false by default
    */
-  _connect() {
+  _connect(retry = false) {
+    if (retry) {
+      this.rpc = new Client({ transport: 'ipc' });
+
+      this._initRPC(false);
+    }
+
     return this.rpc.login({ clientId: BOT_CLIENT_ID })
       .then(() => {
         console.log('RPC connected to Discord');
@@ -45,7 +57,7 @@ class RPCWrapper {
 
         this.status = false;
 
-        setTimeout(() => this._connect(), connectionWaitInterval * 1000);
+        setTimeout(() => this._connect(true), connectionWaitInterval * 1000);
       });
   }
 
