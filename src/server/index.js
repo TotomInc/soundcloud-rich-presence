@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
       .then((response) => response.data);
 
     if (assetList.length >= richPresence.MAX_ASSETS) {
-      await richPresence.deleteOldAssets(assetList);
+      await richPresence.deleteOldAssets(assetList, 25);
     }
 
     const rawTrackData = await soundcloudAPI.resolveTrackURL(trackURL)

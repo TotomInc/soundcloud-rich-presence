@@ -72,9 +72,11 @@ async function deleteAsset(id) {
  * Delete the 10 oldest assets, called when the max assets length is reached.
  *
  * @param {any[]} assets an array of pre-fetched assets
+ * @param {number} [numToDelete] number of assets to delete (10 by default)
  */
-async function deleteOldAssets(assets) {
-  const assetsToDelete = assets.shift(10);
+async function deleteOldAssets(assets, numToDelete = 10) {
+  const assetsToDelete = assets.splice(0, numToDelete);
+
   const deletePromises = assetsToDelete.map((asset) => new Promise((resolve, reject) => deleteAsset(asset.id)
     .then((response) => resolve(response))
     .catch((err) => reject(err))));
