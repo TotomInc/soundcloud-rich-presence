@@ -47,6 +47,7 @@ io.on('connection', (socket) => {
       trackArtworkURL: soundcloudAPI.getArtworkURL(rawTrackData.artwork_url),
       authorArtworkURL: soundcloudAPI.getArtworkURL(rawTrackData.user.avatar_url),
       permalinkURL: rawTrackData.permalink_url,
+      duration: rawTrackData.duration,
     };
 
     const trackArtworkAssetID = await richPresence.uploadAsset(trackData.trackArtworkURL)
@@ -55,7 +56,9 @@ io.on('connection', (socket) => {
     const authorArtworkAssetID = await richPresence.uploadAsset(trackData.authorArtworkURL)
       .then((response) => response.data.name);
 
-    const richPresencePayload = { ...trackData, trackArtworkAssetID, authorArtworkAssetID };
+    const richPresencePayload = {
+      ...trackData, progression, trackArtworkAssetID, authorArtworkAssetID,
+    };
 
     await rpc.setActivity(richPresencePayload)
       .then(() => console.log('new rich-presence state successfully setup', richPresencePayload));

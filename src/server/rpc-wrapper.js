@@ -1,5 +1,6 @@
 // eslint-disable-next-line
 const RPC = require('discord-rpc');
+const moment = require('moment');
 const { Client } = require('discord-rpc');
 
 const BOT_CLIENT_ID = process.env.BOT_CLIENT_ID;
@@ -68,8 +69,11 @@ class RPCWrapper {
    */
   setActivity(data) {
     const {
-      title, author, trackArtworkAssetID, authorArtworkAssetID,
+      title, author, duration, progression, trackArtworkAssetID, authorArtworkAssetID,
     } = data;
+
+    const startTimestamp = moment(+new Date() + (progression * 1000)).unix();
+    const endTimestamp = moment(+new Date() + duration).unix();
 
     /** @type {RPC.Presence} */
     const payload = {
@@ -80,6 +84,8 @@ class RPCWrapper {
       smallImageKey: authorArtworkAssetID,
       smallImageText: author,
       instance: false,
+      startTimestamp,
+      endTimestamp,
     };
 
     return this.rpc.setActivity(payload);
