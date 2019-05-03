@@ -16,7 +16,7 @@ Make sure you have the following dependencies/tools:
 3. Run `npm i`
 4. Execute server (it will auto launch/restart):
    - For Windows users:
-     - run `node src/windows-server.js`, it will create a Windows service which can you can access with `services.msc`
+     - run `node src/windows-service.js`, it will create a Windows service which can you can access with `services.msc`
    - For Mac OS users:
      - install PM2 `npm i -g pm2`
      - run `pm2 start src/server/index.js --name soundcloud-rich-presence`, this will start the server
