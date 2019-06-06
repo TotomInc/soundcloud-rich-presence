@@ -9,8 +9,8 @@ const imageProcessing = require('./image-processing');
 const botToken = process.env.BOT_CLIENT_TOKEN;
 const botID = process.env.BOT_CLIENT_ID;
 
-/** The max. amount of assets that can be stored */
-const MAX_ASSETS = 150;
+/** The amount of assets to store before deleting old ones. */
+const MAX_ASSETS = 100;
 
 const baseURL = 'https://discordapp.com/api/oauth2/applications';
 
@@ -77,11 +77,15 @@ async function deleteAsset(id) {
 async function deleteOldAssets(assets, numToDelete = 10) {
   const assetsToDelete = assets.splice(0, numToDelete);
 
-  const deletePromises = assetsToDelete.map((asset) => new Promise((resolve, reject) => deleteAsset(asset.id)
-    .then((response) => resolve(response))
-    .catch((err) => reject(err))));
-
-  return Promise.all(deletePromises);
+  const deleteAssetPromises = assetsToDelete.map(
+    (asset) => new Promise(
+      (resolve, reject) => deleteAsset(asset.id)
+        .then((response) => resolve(response))
+        .catch((err) => reject(err))
+      )
+    );
+    
+  return Promise.all(deleteAssetPromises);
 }
 
 module.exports = {
