@@ -1,20 +1,7 @@
 {
-  "extends": "airbnb-base",
+  "extends": "@totominc/javascript",
   "env": {
     "browser": true,
     "node": true
-  },
-  "rules": {
-    "import/no-extraneous-dependencies": "off",
-    "no-underscore-dangle": "off",
-    "no-console": "off",
-    "func-names": "off",
-    "prefer-destructuring": "off",
-    "arrow-parens": ["error", "always"],
-    "camelcase": "off",
-    "max-len": ["error", {
-      "code": 120,
-      "ignoreComments": true
-    }]
   }
 }
