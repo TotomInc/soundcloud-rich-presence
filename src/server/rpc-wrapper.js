@@ -1,15 +1,13 @@
-// eslint-disable-next-line
-const RPC = require('discord-rpc');
 const moment = require('moment');
 const { Client } = require('discord-rpc');
 
-const BOT_CLIENT_ID = process.env.BOT_CLIENT_ID;
+const { BOT_CLIENT_ID } = process.env;
 
 const connectionWaitInterval = 10;
 
 class RPCWrapper {
   /**
-   * @param {RPC.Client} rpc
+   * @param {import('discord-rpc').Client} rpc
    */
   constructor(rpc) {
     this.rpc = rpc;
@@ -25,7 +23,9 @@ class RPCWrapper {
    */
   _initRPC(connect = true) {
     this.status = false;
-    this.rpc.on('ready', () => console.log(`RPC client ready, logged in as ${this.rpc.user.username}`));
+    this.rpc.on('ready', () =>
+      console.log(`RPC client ready, logged in as ${this.rpc.user.username}`),
+    );
 
     if (connect) {
       this._connect();
@@ -46,14 +46,17 @@ class RPCWrapper {
       this._initRPC(false);
     }
 
-    return this.rpc.login({ clientId: BOT_CLIENT_ID })
+    return this.rpc
+      .login({ clientId: BOT_CLIENT_ID })
       .then(() => {
         console.log('RPC connected to Discord');
 
         this.status = true;
       })
       .catch((err) => {
-        console.log(`Failed to connect to Discord, trying to reconnect again in ${connectionWaitInterval} seconds`);
+        console.log(
+          `Failed to connect to Discord, trying to reconnect again in ${connectionWaitInterval} seconds`,
+        );
         console.error(err);
 
         this.status = false;
@@ -69,10 +72,15 @@ class RPCWrapper {
    */
   setActivity(data) {
     const {
-      title, author, duration, progression, trackArtworkAssetID, authorArtworkAssetID,
+      title,
+      author,
+      duration,
+      progression,
+      trackArtworkAssetID,
+      authorArtworkAssetID,
     } = data;
 
-    const startTimestamp = moment(+new Date() + (progression * 1000)).unix();
+    const startTimestamp = moment(+new Date() + progression * 1000).unix();
     const endTimestamp = moment(+new Date() + duration).unix();
 
     /** @type {RPC.Presence} */

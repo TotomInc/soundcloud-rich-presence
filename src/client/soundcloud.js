@@ -1,8 +1,9 @@
-(function () {
+/* eslint func-names: "off" */
+(function() {
   const wsServerURL = 'http://127.0.0.1:7399';
 
   /** @type {jQuery} */
-  const $ = window.$;
+  const { $ } = window;
 
   /** @type {SocketIO.Socket} */
   const socket = window.io(wsServerURL);
@@ -40,7 +41,9 @@
       return `https://soundcloud.com${trackEl.attr('href')}`;
     }
 
-    _log('unable to retrieve current track URL because the player doesn\'t exist or is not found in the DOM');
+    _log(
+      "unable to retrieve current track URL because the player doesn't exist or is not found in the DOM",
+    );
     return false;
   }
 
@@ -57,7 +60,9 @@
       return parseInt(trackProgressionSeconds, 10);
     }
 
-    _log('unable to retrieve current progression because the player doesn\'t exist or is not found in the DOM');
+    _log(
+      "unable to retrieve current progression because the player doesn't exist or is not found in the DOM",
+    );
     return false;
   }
 
@@ -69,7 +74,11 @@
     const currentTrackURL = _getCurrentTrackURL();
     const trackProgression = _getTrackProgression();
 
-    if (currentTrackURL !== actualTrackURL && currentTrackURL && socket.connected) {
+    if (
+      currentTrackURL !== actualTrackURL &&
+      currentTrackURL &&
+      socket.connected
+    ) {
       const payload = {
         trackURL: currentTrackURL,
         progression: trackProgression,
@@ -97,4 +106,4 @@
   });
 
   setInterval(() => _loop(), 5000);
-}());
+})();

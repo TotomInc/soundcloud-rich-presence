@@ -7,7 +7,8 @@ const axios = require('axios').default;
  * @returns {Promise<string>} a promise with the image in a base64 string
  */
 function retrieveImageFromURL(url) {
-  return axios.get(url, { responseType: 'arraybuffer' })
+  return axios
+    .get(url, { responseType: 'arraybuffer' })
     .then((response) => Buffer.from(response.data, 'binary').toString('base64'))
     .then((encoded) => 'data:image/jpeg;base64,'.concat(encoded))
     .catch((err) => err);

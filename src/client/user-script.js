@@ -8,7 +8,8 @@
 // @grant       none
 // ==/UserScript==
 
-(function () {
+/* eslint func-names: "off" */
+(function() {
   /** The URL of the full script to load */
   const scriptURL = 'http://127.0.0.1:7399/soundcloud.js';
 
@@ -95,4 +96,4 @@
   loadDependencies(dependenciesURLs)
     .then(() => loadSoundcloudScript())
     .catch((err) => err);
-}());
+})();

@@ -1,7 +1,5 @@
 require('dotenv').config();
 
-// eslint-disable-next-line
-const Axios = require('axios');
 const axios = require('axios').default;
 
 const imageProcessing = require('./image-processing');
@@ -17,14 +15,15 @@ const baseURL = 'https://discordapp.com/api/oauth2/applications';
 /**
  * Get a list of all assets stored in the bot rich-presence.
  *
- * @returns {Axios.AxiosPromise<any>} return an axios-promise response
+ * @returns {import('axios').AxiosPromise<any>} return an axios-promise response
  */
 async function getAssetList() {
   const headers = {
     authorization: botToken,
   };
 
-  return axios.get(`${baseURL}/${botID}/assets`, { headers })
+  return axios
+    .get(`${baseURL}/${botID}/assets`, { headers })
     .then((res) => res)
     .catch((err) => err);
 }
@@ -33,11 +32,11 @@ async function getAssetList() {
  * Upload an asset, image must be a base64 string.
  *
  * @param {string} url the image url of the resource to fetch and upload
- * @returns {Axios.AxiosPromise<any>} return an axios-promise response
+ * @returns {import('axios').AxiosPromise<any>} return an axios-promise response
  */
 async function uploadAsset(url) {
   const headers = {
-    authorization: botToken,
+    'authorization': botToken,
     'content-type': 'application/json',
   };
 
@@ -47,7 +46,8 @@ async function uploadAsset(url) {
     type: '1',
   };
 
-  return axios.post(`${baseURL}/${botID}/assets`, data, { headers })
+  return axios
+    .post(`${baseURL}/${botID}/assets`, data, { headers })
     .then((res) => res)
     .catch((err) => err);
 }
@@ -56,14 +56,15 @@ async function uploadAsset(url) {
  * Delete a specific asset based on its ID.
  *
  * @param {string} id id of the asset to delete
- * @returns {Axios.AxiosPromise<any>} return an axios-promise response
+ * @returns {import('axios').AxiosPromise<any>} return an axios-promise response
  */
 async function deleteAsset(id) {
   const headers = {
     authorization: botToken,
   };
 
-  return axios.delete(`${baseURL}/${botID}/assets/${id}`, { headers })
+  return axios
+    .delete(`${baseURL}/${botID}/assets/${id}`, { headers })
     .then((res) => res)
     .catch((err) => err);
 }
@@ -78,16 +79,21 @@ async function deleteOldAssets(assets, numToDelete = 10) {
   const assetsToDelete = assets.splice(0, numToDelete);
 
   const deleteAssetPromises = assetsToDelete.map(
-    (asset) => new Promise(
-      (resolve, reject) => deleteAsset(asset.id)
-        .then((response) => resolve(response))
-        .catch((err) => reject(err))
-      )
-    );
-    
+    (asset) =>
+      new Promise((resolve, reject) =>
+        deleteAsset(asset.id)
+          .then((response) => resolve(response))
+          .catch((err) => reject(err)),
+      ),
+  );
+
   return Promise.all(deleteAssetPromises);
 }
 
 module.exports = {
-  getAssetList, uploadAsset, deleteAsset, deleteOldAssets, MAX_ASSETS,
+  getAssetList,
+  uploadAsset,
+  deleteAsset,
+  deleteOldAssets,
+  MAX_ASSETS,
 };
